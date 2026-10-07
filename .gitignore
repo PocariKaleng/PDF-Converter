@@ -1,0 +1,10 @@
+.venv/
+.tools/
+.runtime/
+__pycache__/
+*.pyc
+.env
+fonts/latin-modern/*.otf
+fonts/custom/*
+!fonts/custom/.gitkeep
+!fonts/custom/README.md

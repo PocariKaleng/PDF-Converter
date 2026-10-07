@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Converter DOCX ke PDF lokal dengan dukungan Bell MT dan LM Roman 10.">
+  <title>Folio — DOCX ke PDF</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Folio beranda"><img src="/favicon.svg" alt="" width="32" height="32"><span>folio<span class="brand-divider">/</span><span class="brand-tool">document tools</span></span></a>
+    <span class="local-label"><span class="status-dot"></span> Berjalan lokal</span>
+  </header>
+  <main>
+    <div class="intro">
+      <p class="eyebrow">KONVERSI DOKUMEN <span>01</span></p>
+      <h1>DOCX ke PDF<span class="title-dot">.</span></h1>
+      <p class="intro-description">Dari dokumen Word ke PDF, dengan font yang sesuai.<br class="desktop-break"> Bell MT dan LM Roman 10 siap untuk dokumen Anda.</p>
+    </div>
+    <div class="workspace">
+      <section class="converter-panel" aria-labelledby="upload-title">
+        <div class="panel-heading"><h2 id="upload-title">Dokumen Anda</h2><span class="format-label">.DOCX <span aria-hidden="true">→</span> .PDF</span></div>
+        <form id="convert-form">
+          <input id="file-input" class="visually-hidden" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" tabindex="-1" aria-label="Pilih dokumen DOCX">
+          <div id="dropzone" class="dropzone">
+            <svg class="document-icon" width="46" height="56" viewBox="0 0 46 56" fill="none" aria-hidden="true"><path d="M9 2h19l12 12v39H9V2Z" stroke="currentColor" stroke-width="1.5"/><path d="M28 2v13h12M16 25h17M16 32h17M16 39h11" stroke="currentColor" stroke-width="1.5"/><path d="M4 14v37a4 4 0 0 0 4 4h27" stroke="currentColor" stroke-width="1.5"/></svg>
+            <h3>Letakkan dokumen di sini</h3>
+            <p>atau pilih file dari komputer Anda</p>
+            <button class="button button-outline" id="pick-file" type="button">Pilih dokumen <span aria-hidden="true">↗</span></button>
+            <span class="file-limit">DOCX saja · Maksimal 30 MB</span>
+          </div>
+          <div id="selected-file" class="selected-file" hidden>
+            <span class="file-badge">DOCX</span>
+            <div class="file-description"><strong id="file-name"></strong><span id="file-size"></span></div>
+            <button id="remove-file" class="icon-button" type="button" aria-label="Hapus dokumen">×</button>
+          </div>
+          <div class="font-option">
+            <label for="font-select">Font untuk PDF</label>
+            <select id="font-select" name="font">
+              <option value="original">Pertahankan font asli dokumen</option>
+              <option value="Bell MT">Gunakan Bell MT</option>
+              <option value="LM Roman 10">Gunakan LM Roman 10</option>
+            </select>
+            <p id="font-hint">Font, ukuran teks, dan gaya mengikuti dokumen sumber.</p>
+          </div>
+          <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+          <button class="button button-primary" id="convert-button" type="submit" disabled><span id="convert-label">Konversi ke PDF</span><span id="convert-arrow" aria-hidden="true">→</span><span id="spinner" class="spinner" aria-hidden="true" hidden></span></button>
+          <p class="privacy-note"><svg width="13" height="15" viewBox="0 0 13 15" fill="none" aria-hidden="true"><path d="M6.5 1 12 3v4c0 3-3 5.5-5.5 7C4 12.5 1 10 1 7V3l5.5-2Z" stroke="currentColor"/><path d="m4 7 1.7 1.7L9 5.5" stroke="currentColor"/></svg> Dokumen diproses di komputer Anda.</p>
+        </form>
+      </section>
+      <aside class="font-panel" aria-labelledby="font-title">
+        <div class="aside-heading"><span class="eyebrow">TIPOGRAFI</span><h2 id="font-title">Font yang didukung</h2><p>Ketersediaan font diperiksa langsung<br> dari komputer dan proyek.</p></div>
+        <div class="font-specimen">
+          <div class="specimen-heading"><h3>Bell MT</h3><span id="bell-status" class="font-status">Memeriksa…</span></div>
+          <p class="font-sample bell-sample">Aa Bb Cc</p>
+          <p class="specimen-caption bell-sample">Sebuah dokumen, sebuah cerita.</p>
+          <div id="bell-variants" class="variant-list">Memeriksa varian font</div>
+        </div>
+        <div class="font-specimen">
+          <div class="specimen-heading"><h3>LM Roman 10 <span class="font-version">v1.106</span></h3><span id="lm-status" class="font-status">Memeriksa…</span></div>
+          <p class="font-sample lm-sample">Aa Bb Cc</p>
+          <p class="specimen-caption lm-sample">Presisi dalam setiap halaman.</p>
+          <div id="lm-variants" class="variant-list">Memeriksa varian font</div>
+        </div>
+        <div class="engine-note"><span class="note-symbol" aria-hidden="true">↳</span><div><strong id="engine-label">Memeriksa mesin konversi…</strong><p>Font Bell MT memakai instalasi berlisensi Anda. LM Roman 10 disertakan dalam proyek.</p></div></div>
+      </aside>
+    </div>
+    <section id="result" class="result" aria-labelledby="result-title" hidden>
+      <div class="result-heading"><div><p class="eyebrow">HASIL KONVERSI</p><h2 id="result-title" tabindex="-1">PDF siap digunakan.</h2><p id="result-summary"></p></div><a id="download-link" class="button button-primary" download>Unduh PDF <span aria-hidden="true">↓</span></a></div>
+      <details class="font-report"><summary>Lihat font di PDF</summary><ul id="font-report-list"></ul></details>
+      <div class="preview-toolbar"><strong>Pratinjau PDF</strong><div><button id="previous-page" class="page-button" type="button" aria-label="Halaman sebelumnya" disabled>←</button><span id="page-label" aria-live="polite">Halaman 1</span><button id="next-page" class="page-button" type="button" aria-label="Halaman berikutnya" disabled>→</button></div></div>
+      <div id="pdf-preview" class="pdf-preview"><canvas id="pdf-canvas" role="img" aria-label="Pratinjau halaman PDF"></canvas></div>
+      <p id="preview-message" class="preview-help" role="status">Menyiapkan pratinjau…</p>
+    </section>
+  </main>
+  <footer><span>folio / alat dokumen lokal</span><span>Font diperiksa. Dokumen tetap milik Anda.</span></footer>
+</body>
+</html>

@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.otf binary
+web/vendor/** linguist-vendored -whitespace
+fonts/latin-modern/UPSTREAM-README.txt -whitespace
+fonts/latin-modern/GUST-FONT-LICENSE.TXT -whitespace
