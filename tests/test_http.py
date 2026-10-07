@@ -1,5 +1,7 @@
 import http.client
 import json
+from pathlib import Path
+import tempfile
 import threading
 import unittest
 from unittest.mock import patch
@@ -34,6 +36,18 @@ class HttpTests(unittest.TestCase):
 
     def test_host_rebinding_is_rejected(self):
         self.assertEqual(self.request('GET', '/', headers={'Host': 'attacker.example'})[0], 403)
+
+    def test_font_preview_serves_requested_variant_only(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'italic.otf'
+            target.write_bytes(b'italic-font')
+            fonts = {'LM Roman 10': {'variants': {'italic': {'path': str(target), 'embeddable': True}}}}
+            with patch('app.inventory', return_value=fonts):
+                status, body, headers = self.request('GET', '/api/fonts/lm/italic')
+                self.assertEqual((status, body), (200, b'italic-font'))
+                self.assertEqual(headers['Content-Type'], 'font/otf')
+                self.assertEqual(self.request('GET', '/api/fonts/lm/bold')[0], 404)
+                self.assertEqual(self.request('GET', '/api/fonts/lm/../../app.py')[0], 404)
 
     def test_conversion_requires_token_and_same_origin(self):
         self.assertEqual(self.request('POST', '/api/convert', b'x')[0], 403)

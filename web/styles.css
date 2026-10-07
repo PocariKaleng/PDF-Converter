@@ -1,5 +1,10 @@
 @font-face{font-family:BellPreview;src:url('/api/fonts/bell') format('truetype');font-display:swap}
+@font-face{font-family:BellPreview;src:url('/api/fonts/bell/bold') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:BellPreview;src:url('/api/fonts/bell/italic') format('truetype');font-style:italic;font-display:swap}
 @font-face{font-family:LMPreview;src:url('/api/fonts/lm') format('opentype');font-display:swap}
+@font-face{font-family:LMPreview;src:url('/api/fonts/lm/bold') format('opentype');font-weight:700;font-display:swap}
+@font-face{font-family:LMPreview;src:url('/api/fonts/lm/italic') format('opentype');font-style:italic;font-display:swap}
+@font-face{font-family:LMPreview;src:url('/api/fonts/lm/bolditalic') format('opentype');font-weight:700;font-style:italic;font-display:swap}
 :root{--bg:#f5f4ef;--surface:#fff;--ink:#282c27;--muted:#686d63;--line:#ddded5;--accent:#bd492e;--accent-hover:#a23920;--green:#37603f;--green-bg:#eaf0e6;--error:#9f302a;--error-bg:#fff1ed;--radius:8px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',Arial,sans-serif;font-size:14px;line-height:1.5}

@@ -37,14 +37,23 @@ class DocxTests(unittest.TestCase):
         theme = '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:themeElements><a:fontScheme><a:minorFont><a:latin typeface="LM Roman 10"/></a:minorFont></a:fontScheme></a:themeElements></a:theme>'
         self.assertEqual(prepare_docx(docx_bytes(run=run, extra={"word/theme/theme1.xml": theme}), self.target), {"LM Roman 10"})
 
-    def test_font_override_preserves_bold_and_sizes(self):
-        run = '<w:rPr><w:b/><w:sz w:val="32"/></w:rPr>'
-        self.assertEqual(prepare_docx(docx_bytes(run=run), self.target, "LM Roman 10"), {"LM Roman 10"})
-        with ZipFile(self.target) as archive:
-            root = etree.fromstring(archive.read("word/document.xml"))
-            self.assertEqual(root.find('.//' + W + 'rFonts').get(W + 'ascii'), 'LM Roman 10')
-            self.assertIsNotNone(root.find('.//' + W + 'b'))
-            self.assertEqual(root.find('.//' + W + 'sz').get(W + 'val'), '32')
+    def test_font_override_preserves_bold_italic_and_sizes(self):
+        for font in ('Bell MT', 'LM Roman 10'):
+            for properties in ('<w:b/>', '<w:i/>', '<w:b/><w:i/>', '<w:b w:val="0"/><w:i w:val="0"/>'):
+                with self.subTest(font=font, properties=properties):
+                    run = f'<w:rPr>{properties}<w:sz w:val="32"/></w:rPr>'
+                    self.assertEqual(prepare_docx(docx_bytes(run=run), self.target, font), {font})
+                    with ZipFile(self.target) as archive:
+                        root = etree.fromstring(archive.read("word/document.xml"))
+                        rpr = root.find('.//' + W + 'rPr')
+                        self.assertEqual(rpr.find(W + 'rFonts').get(W + 'ascii'), font)
+                        for tag in ('b', 'i'):
+                            expected = etree.fromstring(f'<w:rPr xmlns:w="{W[1:-1]}">{properties}</w:rPr>').find(W + tag)
+                            actual = rpr.find(W + tag)
+                            self.assertEqual(actual is None, expected is None)
+                            if expected is not None:
+                                self.assertEqual(dict(actual.attrib), dict(expected.attrib))
+                        self.assertEqual(rpr.find(W + 'sz').get(W + 'val'), '32')
 
     def test_alias_is_canonicalized(self):
         self.assertEqual(prepare_docx(docx_bytes(font="Latin Modern Roman 10"), self.target), {"LM Roman 10"})

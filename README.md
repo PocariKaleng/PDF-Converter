@@ -11,6 +11,9 @@ pemeriksaan font pada PDF hasilnya.
 
 - Unggah atau drag and drop satu DOCX, maksimal 30 MB.
 - Pertahankan font dokumen, atau ubah teks ke Bell MT / LM Roman 10.
+- **Bold dan italic** tetap mengikuti teks sumber, termasuk saat mengganti font.
+  LM Roman 10 v1.106 juga menyertakan varian **bold italic** asli. Contoh gaya
+  pada tampilan memakai file font regular, bold, dan italic yang sesuai.
 - Ukuran teks, bold, italic, gambar, tabel, dan pengaturan halaman diteruskan ke
   Word. Mengubah font dapat mengubah panjang baris dan jumlah halaman.
 - Ekspor PDF melalui Word dan verifikasi embedding kedua font yang didukung.
@@ -102,9 +105,10 @@ Untuk menguji mesin Word sungguhan pada komputer yang memenuhi persyaratan:
 .\.venv\Scripts\python.exe scripts/smoke_test.py
 ```
 
-Script ini menjalankan empat konversi dan memeriksa font pada PDF sungguhan.
+Script ini menjalankan empat konversi dan memeriksa font pada PDF sungguhan,
+termasuk pemetaan teks regular, bold, italic, serta bold italic LM Roman 10.
 
-Validasi lokal: 20 tes otomatis lolos; dokumen dua halaman dengan tabel,
+Validasi lokal: 21 tes otomatis lolos; dokumen dua halaman dengan tabel,
 header/footer, serta semua varian kedua font berhasil dikonversi dan diperiksa
 secara visual. Seluruh varian LM Roman 10 di PDF terverifikasi versi 1.106.
 Unggah, pratinjau, navigasi halaman, dan unduh diuji melalui browser.

@@ -14,6 +14,12 @@ from converter.engine import convert, word_available
 from converter.errors import ConversionError
 from converter.fonts import inventory, public_inventory, ROOT
 
+FONT_ROUTES = {}
+for slug, family in (("bell", "Bell MT"), ("lm", "LM Roman 10")):
+    FONT_ROUTES[f"/api/fonts/{slug}"] = (family, "regular")
+    for variant in ("regular", "bold", "italic", "bolditalic"):
+        FONT_ROUTES[f"/api/fonts/{slug}/{variant}"] = (family, variant)
+
 
 class Handler(BaseHTTPRequestHandler):
     def _allowed_host(self):
@@ -49,9 +55,9 @@ class Handler(BaseHTTPRequestHandler):
             if not result or not secrets.compare_digest(path.rsplit('/', 1)[-1], result[0]):
                 return self._respond(404, {"error": "Hasil sudah diganti. Konversi ulang dokumen untuk mengunduhnya."})
             return self._respond(200, result[2], 'application/pdf', {'Content-Disposition': "attachment; filename=\"document.pdf\"; filename*=UTF-8''" + quote(result[1], safe="")})
-        if path in {"/api/fonts/bell", "/api/fonts/lm"}:
-            name = "Bell MT" if path.endswith("bell") else "LM Roman 10"
-            font = inventory()[name]["variants"].get("regular")
+        if path in FONT_ROUTES:
+            name, variant = FONT_ROUTES[path]
+            font = inventory()[name]["variants"].get(variant)
             if not font or not font["embeddable"]:
                 return self._respond(404, {"error": "Font tidak tersedia."})
             file = Path(font["path"])

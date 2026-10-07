@@ -69,8 +69,8 @@ document.addEventListener('drop', (e) => e.preventDefault());
 fontSelect.addEventListener('change', () => {
   clearResult();
   $('#font-hint').textContent = fontSelect.value === 'original'
-    ? 'Font, ukuran teks, dan gaya mengikuti dokumen sumber.'
-    : `Teks memakai ${fontSelect.value}. Ukuran, bold, dan italic mengikuti dokumen; perubahan font dapat menggeser tata letak.`;
+    ? 'Font dan ukuran mengikuti dokumen. Bold, italic, dan bold italic tetap dipertahankan.'
+    : `Teks memakai ${fontSelect.value}. Ukuran, bold, italic, dan bold italic mengikuti dokumen; perubahan font dapat menggeser tata letak.`;
   updateButton();
 });
 

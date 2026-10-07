@@ -18,3 +18,12 @@ def docx_bytes(font="Bell MT", text="Contoh dokumen", extra=None, run="", styles
         for name, content in parts.items():
             archive.writestr(name, content)
     return output.getvalue()
+
+
+def styled_docx_bytes(font, variants=('regular', 'bold', 'italic', 'bolditalic')):
+    paragraphs = []
+    for variant in variants:
+        properties = ('<w:b/>' if 'bold' in variant else '') + ('<w:i/>' if 'italic' in variant else '')
+        paragraphs.append(f'<w:p><w:r><w:rPr>{properties}</w:rPr><w:t>Contoh {variant}</w:t></w:r></w:p>')
+    document = f'<w:document xmlns:w="{W}"><w:body>{"".join(paragraphs)}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>'
+    return docx_bytes(font=font, extra={'word/document.xml': document})
